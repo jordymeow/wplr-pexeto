@@ -160,7 +160,14 @@ class WPLR_Extension_Pixeto {
 
   // Remove the media from the collection.
   function remove_media_from_collection( $mediaId, $collectionId ) {
+    global $wplr;
     $this->add_media_to_collection( $mediaId, $collectionId, true );
+
+    // Need to delete the featured image if it was this media
+    $postId = $wplr->get_meta( "pexeto_gallery_id", $collectionId );
+    $thumbnailId = get_post_meta( $postId, '_thumbnail_id', -1 );
+    if ( $thumbnailId == $mediaId )
+      delete_post_meta( $postId, '_thumbnail_id' );
   }
 
   // Delete the collection.
