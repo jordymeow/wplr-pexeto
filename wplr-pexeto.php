@@ -1,8 +1,8 @@
 <?php
 
 /*
-Plugin Name: Pixeto for Lightroom
-Description: Pixeto Extension for Lightroom through the WP/LR Sync plugin.
+Plugin Name: Pexeto for Lightroom
+Description: Pexeto Extension for Lightroom through the WP/LR Sync plugin.
 Version: 0.1.0
 Author: Jordy Meow
 Author URI: http://www.meow.fr
@@ -40,7 +40,7 @@ class WPLR_Extension_Pixeto {
   // It's fairly important to add the current extension name to this in order to show to the users
   // that the extensions is available and loaded.
   function extensions( $extensions ) {
-    array_push( $extensions, 'Pixeto Themes' );
+    array_push( $extensions, 'Pexeto Themes' );
     return $extensions;
   }
 
@@ -48,7 +48,7 @@ class WPLR_Extension_Pixeto {
     global $wplr;
 
     // If exists already, avoid re-creating
-    $hasMeta = $wplr->get_meta( "pixeto_gallery_id", $collectionId );
+    $hasMeta = $wplr->get_meta( "pexeto_gallery_id", $collectionId );
     if ( !empty( $hasMeta ) )
       return;
 
@@ -62,10 +62,10 @@ class WPLR_Extension_Pixeto {
     $id = wp_insert_post( $post );
 
     // Add a meta to retrieve easily the LR ID for that collection from a WP Post ID
-    $wplr->set_meta( 'pixeto_gallery_id', $collectionId, $id );
+    $wplr->set_meta( 'pexeto_gallery_id', $collectionId, $id );
 
     // Associate this portfolio to a category
-    $parentTermId = $wplr->get_meta( "pixeto_term_id", $inFolderId );
+    $parentTermId = $wplr->get_meta( "pexeto_term_id", $inFolderId );
     if ( $parentTermId ) {
       $term = get_term_by( 'term_id', $parentTermId, 'portfolio_category' );
       if ( !empty( $term ) )
@@ -76,21 +76,21 @@ class WPLR_Extension_Pixeto {
   // Create the folder (category)
   function create_folder( $folderId, $inFolderId, $folder ) {
     global $wplr;
-    $parentTermId = $wplr->get_meta( "pixeto_term_id", $inFolderId );
+    $parentTermId = $wplr->get_meta( "pexeto_term_id", $inFolderId );
     $result = wp_insert_term( $folder['name'], 'portfolio_category', array( 'parent' => $parentTermId ) );
     if ( is_wp_error( $result ) ) {
       error_log( "Issue while creating the folder " . $folder['name'] . "." );
       error_log( $result->get_error_message() );
       return;
     }
-    $wplr->set_meta( 'pixeto_term_id', $folderId, $result['term_id'] );
+    $wplr->set_meta( 'pexeto_term_id', $folderId, $result['term_id'] );
   }
 
   // Updated the collection (gallery) with new information.
   // Currently, that would be only its name.
   function update_collection( $collectionId, $collection ) {
     global $wplr;
-    $id = $wplr->get_meta( "pixeto_gallery_id", $collectionId );
+    $id = $wplr->get_meta( "pexeto_gallery_id", $collectionId );
     $post = array( 'ID' => $id, 'post_title' => wp_strip_all_tags( $collection['name'] ) );
     wp_update_post( $post );
   }
@@ -99,7 +99,7 @@ class WPLR_Extension_Pixeto {
   // Currently, that would be only its name.
   function update_folder( $folderId, $folder ) {
     global $wplr;
-    $termId = $wplr->get_meta( "pixeto_term_id", $folderId );
+    $termId = $wplr->get_meta( "pexeto_term_id", $folderId );
     wp_update_term( $termId, 'portfolio_category', array( 'name' => $folder['name'] ) );
   }
 
@@ -107,10 +107,10 @@ class WPLR_Extension_Pixeto {
   // If the folder is empty, then it is the root.
   function move_folder( $folderId, $inFolderId, $previousFolderId ) {
     global $wplr;
-    $termId = $wplr->get_meta( "pixeto_term_id", $folderId );
+    $termId = $wplr->get_meta( "pexeto_term_id", $folderId );
     $parentTermId = null;
     if ( !empty( $inFolderId ) )
-      $parentTermId = $wplr->get_meta( "pixeto_term_id", $inFolderId );
+      $parentTermId = $wplr->get_meta( "pexeto_term_id", $inFolderId );
     wp_update_term( $termId, 'portfolio_category', array( 'parent' => $parentTermId ) );
   }
 
@@ -118,9 +118,9 @@ class WPLR_Extension_Pixeto {
   // If the folder is empty, then it is the root.
   function move_collection( $collectionId, $folderId, $previousFolderId ) {
     global $wplr;
-    $galleryId = $wplr->get_meta( "pixeto_gallery_id", $collectionId );
-    $parentTermId = empty( $folderId ) ? null : $wplr->get_meta( "pixeto_term_id", $folderId );
-    $previousTermId = empty( $previousFolderId ) ? null : $wplr->get_meta( "pixeto_term_id", $previousFolderId );
+    $galleryId = $wplr->get_meta( "pexeto_gallery_id", $collectionId );
+    $parentTermId = empty( $folderId ) ? null : $wplr->get_meta( "pexeto_term_id", $folderId );
+    $previousTermId = empty( $previousFolderId ) ? null : $wplr->get_meta( "pexeto_term_id", $previousFolderId );
 
     // Remove the previous term (category) and add the new one
     wp_remove_object_terms( $galleryId, $previousTermId, 'portfolio_category' );
@@ -131,7 +131,7 @@ class WPLR_Extension_Pixeto {
   // The $mediaId is actually the WordPress Post/Attachment ID.
   function add_media_to_collection( $mediaId, $collectionId, $isRemove = false ) {
     global $wplr;
-    $id = $wplr->get_meta( "pixeto_gallery_id", $collectionId );
+    $id = $wplr->get_meta( "pexeto_gallery_id", $collectionId );
     $content = get_post_field( 'post_content', $id );
     preg_match_all( '/\[gallery.*ids="([0-9,]*)"\]/', $content, $results );
     if ( !empty( $results ) && !empty( $results[1] ) ) {
@@ -166,17 +166,17 @@ class WPLR_Extension_Pixeto {
   // Delete the collection.
   function remove_collection( $collectionId ) {
     global $wplr;
-    $id = $wplr->get_meta( "pixeto_gallery_id", $collectionId );
+    $id = $wplr->get_meta( "pexeto_gallery_id", $collectionId );
     wp_delete_post( $id, true );
-    $wplr->delete_meta( 'pixeto_gallery_id', $collectionId );
+    $wplr->delete_meta( 'pexeto_gallery_id', $collectionId );
   }
 
   // Delete the folder.
   function remove_folder( $folderId ) {
     global $wplr;
-    $id = $wplr->get_meta( "pixeto_term_id", $folderId );
+    $id = $wplr->get_meta( "pexeto_term_id", $folderId );
     wp_delete_term( $id, 'portfolio_category' );
-    $wplr->delete_meta( 'pixeto_term_id', $folderId );
+    $wplr->delete_meta( 'pexeto_term_id', $folderId );
   }
 }
 
