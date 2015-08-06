@@ -64,6 +64,13 @@ class WPLR_Extension_Pixeto {
     // Add a meta to retrieve easily the LR ID for that collection from a WP Post ID
     $wplr->set_meta( 'pexeto_gallery_id', $collectionId, $id );
 
+    add_post_meta( $id, 'action_value', 'slider_full_height', true );
+    add_post_meta( $id, 'img_columns_value', 1, true );
+    add_post_meta( $id, 'img_rows_value', 1, true );
+    add_post_meta( $id, 'crop_value', 'c', true );
+    add_post_meta( $id, 'layout_value', 'right', true );
+    add_post_meta( $id, 'sidebar_value', 'default', true );
+
     // Associate this portfolio to a category
     $parentTermId = $wplr->get_meta( "pexeto_term_id", $inFolderId );
     if ( $parentTermId ) {
