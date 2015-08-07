@@ -162,6 +162,11 @@ class WPLR_Extension_Pixeto {
 
       // Add a default featured image if none
       add_post_meta( $id, '_thumbnail_id', $mediaId, true );
+
+      // Photolux uses the Preview Value
+      $hasPreviewValue = get_post_meta( $id, 'preview_value', null );
+      if ( empty( $hasPreviewValue ) )
+        add_post_meta( $id, 'preview_value', wp_get_attachment_url( $mediaId ), true );
     }
   }
 
