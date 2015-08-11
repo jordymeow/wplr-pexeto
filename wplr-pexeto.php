@@ -1,5 +1,4 @@
 <?php
-
 /*
 Plugin Name: Pexeto for Lightroom
 Description: Pexeto Extension for Lightroom through the WP/LR Sync plugin.
