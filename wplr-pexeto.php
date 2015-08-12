@@ -54,7 +54,7 @@ class WPLR_Extension_Pixeto {
     // Create the collection.
     $post = array(
       'post_title'    => wp_strip_all_tags( $collection['name'] ),
-      'post_content'  => $isFolder ? '' : '[gallery ids=""]', // if folder, nothing, if collection, let's start a gallery
+      'post_content'  => $isFolder ? '' : '[gallery ids="" link="file"]', // if folder, nothing, if collection, let's start a gallery
       'post_status'   => 'publish',
       'post_type'     => 'portfolio'
     );
@@ -63,7 +63,7 @@ class WPLR_Extension_Pixeto {
     // Add a meta to retrieve easily the LR ID for that collection from a WP Post ID
     $wplr->set_meta( 'pexeto_gallery_id', $collectionId, $id );
 
-    add_post_meta( $id, 'action_value', 'slider_full_height', true );
+    add_post_meta( $id, 'action_value', 'lightbox', true );
     add_post_meta( $id, 'img_columns_value', 1, true );
     add_post_meta( $id, 'img_rows_value', 1, true );
     add_post_meta( $id, 'crop_value', 'c', true );
@@ -139,7 +139,7 @@ class WPLR_Extension_Pixeto {
     global $wplr;
     $id = $wplr->get_meta( "pexeto_gallery_id", $collectionId );
     $content = get_post_field( 'post_content', $id );
-    preg_match_all( '/\[gallery.*ids="([0-9,]*)"\]/', $content, $results );
+    preg_match_all( '/\[gallery.*ids="([0-9,]*).*"\]/', $content, $results );
     if ( !empty( $results ) && !empty( $results[1] ) ) {
       $str = $results[1][0];
       $ids = !empty( $str ) ? explode( ',', $str ) : array();
@@ -162,10 +162,12 @@ class WPLR_Extension_Pixeto {
       // Add a default featured image if none
       add_post_meta( $id, '_thumbnail_id', $mediaId, true );
 
-      // Photolux uses the Preview Value
-      $hasPreviewValue = get_post_meta( $id, 'preview_value', null );
-      if ( empty( $hasPreviewValue ) )
-        add_post_meta( $id, 'preview_value', wp_get_attachment_url( $mediaId ), true );
+      // Expression uses the Preview Value but not the other Pexeto themes
+      if ( defined( PEXETO_SHORTNAME ) && PEXETO_SHORTNAME == 'expr' ) {
+        $hasPreviewValue = get_post_meta( $id, 'preview_value', null );
+        if ( empty( $hasPreviewValue ) )
+          add_post_meta( $id, 'preview_value', wp_get_attachment_url( $mediaId ), true );
+      }
     }
   }
 
