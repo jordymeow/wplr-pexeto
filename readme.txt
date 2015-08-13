@@ -1,4 +1,4 @@
-=== Pixeto for Lightroom ===
+=== Pexeto for Lightroom ===
 Contributors: TigrouMeow
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=H2S7S3G4XMJ6J
 Tags: lightroom, image, gallery, media, photo, export, management, admin, sync, synchronization
@@ -6,19 +6,19 @@ Requires at least: 4.0
 Tested up to: 4.2.4
 Stable tag: 0.1.0
 
-Portfolio (and their categories) in the Pixeto Themes will be synchronized with Lightroom. This magic requires also the WP/LR Sync plugin to be installed.
+Portfolio (and their categories) in the Pexeto Themes will be synchronized with Lightroom. This magic requires also the WP/LR Sync plugin to be installed.
 
 == Description ==
 
-Portfolio (and their categories) in the Pixeto Themes will be synchronized with Lightroom (your photos, collections, and collection sets). This magic requires also the WP/LR Sync plugin to be installed.
+Portfolio (and their categories) in the Pexeto Themes will be synchronized with Lightroom (your photos, collections, and collection sets). This magic requires also the WP/LR Sync plugin to be installed.
 
 Languages: English.
 
 == Installation ==
 
 1. Install WP/LR Sync (http://apps.meow.fr/wplr-sync)
-2. Install a Pixeto theme
-3. Install Pixeto for Lightroom (this plugin)
+2. Install a Pexeto theme
+3. Install Pexeto for Lightroom (this plugin)
 4. Synchronize everything :)
 
 == Upgrade Notice ==
